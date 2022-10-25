@@ -107,7 +107,7 @@ def add_friends():
 if __name__ == "__main__":
     initialize_database()
 
-    # add friens
+    # add friends
     add_friends() 
 
     # Example to list all friends
