@@ -76,6 +76,29 @@ def database_get_all_friends():
     all_friends = session.query(Friend).all()
     print(all_friends)
 
+def add_friends():
+    """
+    Freunde eingeben
+    """
+    addingFriends = True
+
+    while addingFriends:
+        new_friend = Friend()
+
+        new_friend.first_name = input("Name \t: ")
+        new_friend.last_name = input("Surname \t:")
+        new_friend.phone_nr = input("Phone# \t:")
+        new_friend.nick_name = input("Nick \t:")
+        new_friend.address = input("Address \t:")
+        new_friend.birthday = input("BDay \t:")
+        new_friend.email = input("Email \t:")
+        addingFriends = input("Add more friends? Leave blank to not.")
+
+    # new_friend = Friend(first_name = "Robert", last_name = "Kozljanic", phone_nr = "0157 24 88 357", nick_name = "Roberto", 
+    #    address = "MUC", birthday = "30.3.1970", email = "roberto@gmail.com")
+
+    database_add_friend(new_friend)
+    
 
 
 # # # ###########################################
@@ -84,23 +107,8 @@ def database_get_all_friends():
 if __name__ == "__main__":
     initialize_database()
 
-    # Example to add a new friend
-    
-    new_friend = Friend()
-
-    while new_friend.first_name == '':
-        new_friend.first_name = input("Name \t: ")
-        new_friend.last_name = input("Surname \t:")
-        new_friend.phone_nr = input("Phone# \t:")
-        new_friend.nick_name = input("Nick \t:")
-        new_friend.address = input("Address \t:")
-        new_friend.birthday = input("BDay \t:")
-        new_friend.email = input("Email \t:")
-
-    # new_friend = Friend(first_name = "Robert", last_name = "Kozljanic", phone_nr = "0157 24 88 357", nick_name = "Roberto", 
-    #    address = "MUC", birthday = "30.3.1970", email = "roberto@gmail.com")
-
-    database_add_friend(new_friend)
+    # add friens
+    add_friends() 
 
     # Example to list all friends
     database_get_all_friends()
