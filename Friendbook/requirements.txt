@@ -1,0 +1,3 @@
+rich
+simple-term-menu
+SQLAlchemy
