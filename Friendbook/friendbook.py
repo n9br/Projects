@@ -1,8 +1,15 @@
 from decimal import Decimal
-from turtle import window_height
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
+import os
+from tkinter import commondialog
+from rich import print
+from rich.console import Console
+from rich.table import Table
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, update
 from sqlalchemy.orm import declarative_base, sessionmaker
+from turtle import window_height
 
+# rich console
+console = Console()
 
 # # # ###########################################
 # # Do not touch!
@@ -61,21 +68,6 @@ def initialize_database():
     """
     Base.metadata.create_all(database)
 
-
-def database_add_friend(friend: Friend):
-    """
-    Database command to add a new friend.
-    """
-    session.add(friend)
-    session.commit()
-
-def database_get_all_friends():
-    """
-    Database command to get all friends.
-    """
-    all_friends = session.query(Friend).all()
-    print(all_friends)
-
 def add_friends():
     """
     Freunde eingeben
@@ -97,9 +89,138 @@ def add_friends():
     # new_friend = Friend(first_name = "Robert", last_name = "Kozljanic", phone_nr = "0157 24 88 357", nick_name = "Roberto", 
     #    address = "MUC", birthday = "30.3.1970", email = "roberto@gmail.com")
 
-    database_add_friend(new_friend)
-    
+    # !? Validierung ?!
 
+    database_add_friend(new_friend)
+
+
+def update_one_friend():
+    """
+    update one friend
+    """
+
+    friend_id = input("Which ID do you want to update? :")
+    friend = database_get_one_friend(friend_id)
+
+    print("""
+        Friend_fields:
+        first_name
+        last_name
+        phone_nr
+        nick_name
+        address
+        birthday
+        email
+    """
+    )
+
+    friend_fields = {}
+    friend_field_to_update = input("Please enter the field of your friend to update: ")
+    friend_field_new_value = input(f"Please enter the new value to {friend_field_to_update}: ")
+    friend_fields[friend_field_to_update] = friend_field_new_value
+
+    console.print(f"Update friend {friend.first_name} {friend.last_name}.", style="green")
+    database_update_one_friend(friend, friend_fields)
+
+
+    # updateCol = input()
+    # updateStr = input("Enter new value: ")
+
+    # database_update_one_friend(updateId,updateCol,updateStr)
+
+
+
+def database_add_friend(friend: Friend):
+    """
+    Database command to add a new friend.
+    """
+    session.add(friend)
+    # ORM - Object Relational Mapper 
+    session.commit()
+
+def database_delete_friend(id: str):
+    """
+    DB delete record
+    """
+    delFriend = session.get(Friend, id)
+    session.delete(delFriend)
+    session.commit()
+    # session.query.filter(User.id == 123).delete()
+
+def database_get_all_friends():
+    """
+    Database command to get all friends.
+    """
+    #os.
+    all_friends = session.query(Friend).all()
+    
+    table = Table(show_header=True, header_style="bold magenta")
+    table.add_column("id", style='dim')
+    table.add_column("FirstName")
+    table.add_column("LastName")
+    table.add_column("Phone")
+    table.add_column("Nick")
+    table.add_column("Address")
+    table.add_column("birthday")
+    table.add_column("email")
+
+    for friend in all_friends:
+    #    print(f"{friend.first_name} {friend.last_name}")
+        table.add_row(str(friend.id),friend.first_name,friend.last_name,friend.phone_nr,friend.nick_name,
+        friend.address,friend.birthday,friend.email)
+    console.print(table)
+
+
+def database_get_one_friend(friend_id: int):
+    """
+    Database command to get one friend by ID.
+    """
+    return session.query(Friend).get(friend_id)
+
+
+# def database_update_one_friend(id: int, ucol: str, ustr: str):
+def database_update_one_friend(friend: Friend, fields: dict):
+
+    """
+    DB update record
+    https://docs.sqlalchemy.org/en/14/orm/query.html#sqlalchemy.orm.Query.update
+    """
+    
+    session.query(Friend).filter(Friend.id == friend.id).update(fields)
+    # session.execute(
+    #     update(Friend)
+    #     .where(Friend.id == id)
+    #     .values(ucol=ustr)
+    # )
+    session.commit()
+
+
+def delete_one_friend():
+    """
+    select and delete friend
+    """
+       
+    delId = input("Which id do you want to delete? :")
+
+    database_delete_one_friend(str(delId))
+
+    
+def getUserInput():
+    print('''
+    What do you want to do ?
+
+    (a)dd user
+    (l)ist users
+    (d)elete user
+    (u)pdate user
+    (e)xit    
+    
+    ''')
+
+    userInput = input()
+    userInput = userInput.lower()
+
+    return(userInput)
 
 # # # ###########################################
 # # # Main
@@ -107,8 +228,24 @@ def add_friends():
 if __name__ == "__main__":
     initialize_database()
 
-    # add friends
-    add_friends() 
+    while True:
 
-    # Example to list all friends
-    database_get_all_friends()
+        userInput = getUserInput()
+
+        match userInput:
+            case 'e':
+                exit(1)
+
+            case 'a':
+                add_friends() 
+
+            case 'l':
+                # Example to list all friends
+                database_get_all_friends()
+            
+            case 'u':
+                database_get_all_friends()
+                update_one_friend()
+
+            case 'd':
+                delete_one_friend()
