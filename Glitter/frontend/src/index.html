@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <title>Glitter</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.15.22/dist/css/uikit.min.css" />
+
+        <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+        <style>
+            .gl-center {
+                text-align: center;
+            }
+            .gl-container-center {
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>    
+    </head>
+
+    <body>
+        <header>
+            <nav class="uk-navbar-container" uk-navbar>
+                <div class="uk-navbar-left uk-container">
+            
+                    <ul class="uk-navbar-nav">
+                        <li uk-toggle="target: #gl-create-glitt-modal"  class="uk-active"><a href="#">Create</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        
+        <div class="uk-container">
+            <h1 class="gl-center">Glitter</h1>
+            <div class="uk-container gl-container-center" id="gl-card-container">
+            </div>
+        </div>
+
+            <div uk-modal id="gl-create-glitt-modal">
+                <div class="uk-modal-dialog uk-margin-auto-vertical">
+                    <button class="uk-modal-close-default" type="button" uk-close></button>
+                    <div class="uk-modal-header">
+                        <h2 class="uk-modal-title">Create New Glitt</h2>
+                    </div>
+
+                    <div class="uk-modal-body">
+                        <div class="uk-margin">
+                            <div class="uk-form-label">User</div>
+                            <input class="uk-input" id="gl-glituser" name="user" placeholder="User" />
+                        </div>
+
+                        <div class="uk-margin">
+                            <div class="uk-form-label">Glitt</div>
+                            <textarea 
+                                    class="uk-textarea" 
+                                    rows="5" 
+                                    placeholder="your glit here ..." 
+                                    id="gl-glittext"
+                                    name="text"
+                                    aria-label="Textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="uk-modal-footer">
+                        <div style="display: flex; justify-content: center;">
+                            <button type="reset" class="uk-button">Reset</button>
+                            <button class="uk-button uk-button-primary" onclick="saveGlit()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+    </body>
+
+
+<!-- UIkit JS -->
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.15.22/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.15.22/dist/js/uikit-icons.min.js"></script>
+
+<!-- <script src='main.js'></script> -->
+<script src="glitter-client.ts"></script>
+</html>
